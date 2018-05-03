@@ -64,6 +64,7 @@ public class MainPageAdapter extends FragmentPagerAdapter {
         if (tabType == TabTypeAnn.SHOP_CART) {
             TextView tvCartNum = (TextView) tabView.findViewById(R.id.tab_cart_tv);
             tvCartNum.setVisibility(View.VISIBLE);
+            tvCartNum.setText("0");
         }
         return tabView;
     }

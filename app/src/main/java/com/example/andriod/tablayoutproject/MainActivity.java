@@ -29,8 +29,10 @@ import butterknife.Unbinder;
  */
 public class MainActivity extends FragmentActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
+
     static String[] mStringArray;
     static int[][] mIconId;
+    // 测试数据
     static {
         mStringArray = new String[] {"首页", "分类", "发现", "购物车", "会员"};
         mIconId = new int[][] {{R.drawable.tab_home, R.drawable.tab_home_press},
@@ -56,6 +58,7 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void initData() {
+        // TODO: 2018/5/3 从后台获取数据
         mTabItemInfoList = new ArrayList<>();
         mTabItemInfoList.add(new TabItemInfo(TabTypeAnn.HOME, mStringArray[0], mIconId[0], HomeFragment.class));
         mTabItemInfoList.add(new TabItemInfo(TabTypeAnn.GOODS, mStringArray[1], mIconId[1], GoodsFragment.class));
@@ -98,7 +101,7 @@ public class MainActivity extends FragmentActivity {
     }
 
     /**
-     * 异步获取购物车数量显示在UI
+     * 异模拟步获取购物车数量显示在UI
      * @param tabView 购物车对应的tabview
      */
     private void getCartNum(final TextView tabView) {
@@ -106,11 +109,11 @@ public class MainActivity extends FragmentActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                boolean isEnd=false;
-                int cartNum=0;
-                for(;isEnd==false;){
-                    if(cartNum>15){
-                        isEnd=true;
+                boolean isEnd = false;
+                int cartNum = 0;
+                for (; isEnd == false;) {
+                    if (cartNum > 15) {
+                        isEnd = true;
                         return;
                     }
                     cartNum++;
@@ -119,11 +122,12 @@ public class MainActivity extends FragmentActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            tabView.setText(String.valueOf(finalCartNum));
+                            if (finalCartNum != 0) {
+                                tabView.setText(String.valueOf(finalCartNum));
+                            }
                         }
                     });
                 }
-
             }
         }).start();
     }

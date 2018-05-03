@@ -14,30 +14,8 @@
         android:layout_weight="1" />
 
     <android.support.design.widget.TabLayout
-        app:tabSelectedTextColor="#f0f"
-        app:tabTextColor="#ff0"
-        app:tabIndicatorHeight="0dip"
         android:id="@+id/main_tl"
         android:layout_width="match_parent"
-        android:layout_height="48dip"/>
-    <!--<com.example.andriod.tablayoutproject.view.TabView-->
-    <!--android:paddingBottom="3dip"-->
-    <!--android:paddingTop="9dip"-->
-    <!--android:text="首页"-->
-    <!--android:gravity="center"-->
-    <!--android:id="@+id/main_tv"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--app:drawableDirection="top"-->
-    <!--app:drawablePadding="3dip"-->
-    <!--app:drawableHeight="25dip"-->
-    <!--app:drawableSrc="@drawable/tab_home"-->
-    <!--app:drawableWidth="30dip" />-->
-    <!--<TextView-->
-    <!--android:drawableTop="@drawable/tab_home"-->
-    <!--android:id="@+id/main_title_tv"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:text="首页" />-->
-
+        android:layout_height="48dip"
+        app:tabIndicatorHeight="0dip" />
 </LinearLayout>
