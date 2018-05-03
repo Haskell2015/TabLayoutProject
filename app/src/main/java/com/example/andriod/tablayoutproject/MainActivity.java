@@ -68,7 +68,7 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void initView() {
-        mMainPageAdapter = new MainPageAdapter(this, getSupportFragmentManager(), mTabItemInfoList);
+        mMainPageAdapter = new MainPageAdapter(this, getSupportFragmentManager(), mTabItemInfoList, mIconId);
         mViewPager.setAdapter(mMainPageAdapter);
 
         mTabLayout.setupWithViewPager(mViewPager);
@@ -76,8 +76,10 @@ public class MainActivity extends FragmentActivity {
         for (int i = 0, size = mTabLayout.getTabCount(); i < size; i++) {
             TabLayout.Tab tab = mTabLayout.getTabAt(i);
             if (null != tab) {
-                View tabView = mMainPageAdapter.getTabView(i, mTabItemInfoList.get(i).getmTabType());
-                getCartNum((TextView) tabView.findViewById(R.id.tab_cart_tv));
+                View tabView = mMainPageAdapter.getTabView(i);
+                if (mTabItemInfoList.get(i).getmTabType() == TabTypeAnn.SHOP_CART) {
+                    getCartNum((TextView) tabView.findViewById(R.id.tab_cart_tv));
+                }
                 tab.setCustomView(tabView);
                 mMainPageAdapter.setTabViewState(tab, tab.isSelected());
             }
@@ -123,6 +125,7 @@ public class MainActivity extends FragmentActivity {
                         @Override
                         public void run() {
                             if (finalCartNum != 0) {
+                                tabView.setVisibility(View.VISIBLE);
                                 tabView.setText(String.valueOf(finalCartNum));
                             }
                         }
