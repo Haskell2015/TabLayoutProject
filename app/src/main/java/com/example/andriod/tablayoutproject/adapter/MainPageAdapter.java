@@ -1,12 +1,12 @@
 package com.example.andriod.tablayoutproject.adapter;
 
+import java.util.List;
+
 import android.content.Context;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,9 +16,8 @@ import com.example.andriod.tablayoutproject.R;
 import com.example.andriod.tablayoutproject.ann.TabTypeAnn;
 import com.example.andriod.tablayoutproject.entity.TabItemInfo;
 
-import java.util.List;
-
 /**
+ * 主页面的ViewPagerAdapter
  * @author jiangqq
  * @date 2018/5/3
  * Email:3350730342@qq.com
@@ -52,29 +51,35 @@ public class MainPageAdapter extends FragmentPagerAdapter {
     }
 
     /**
-     *
+     * 获取对应tab的view
      * @param position tab选中的位置
      * @param tabType tab加载的fragment类型
      * @return 当前tab的视图
      */
     public View getTabView(int position, int tabType) {
         View tabView = LayoutInflater.from(mContext).inflate(R.layout.tab_item_layout, null);
-         TextView tvTitle = (TextView) tabView.findViewById(R.id.tab_title_tv);
-        // ImageView ivIcon = (ImageView) tabView.findViewById(R.id.tab_icon_iv);
-
-         tvTitle.setText(mTabItemInfoList.get(position).getmTitle());
-        // ivIcon.setImageResource(mTabItemInfoList.get(position).getmIconResId()[0]);
+        TextView tvTitle = (TextView) tabView.findViewById(R.id.tab_title_tv);
+        tvTitle.setText(mTabItemInfoList.get(position).getmTitle());
 
         if (tabType == TabTypeAnn.SHOP_CART) {
             TextView tvCartNum = (TextView) tabView.findViewById(R.id.tab_cart_tv);
             tvCartNum.setVisibility(View.VISIBLE);
         }
-
         return tabView;
     }
 
+    /**
+     * 用于设置tab选中和非选中的显示效果--主要是图标和文字的颜色
+     * @param tab  当前选中的tab
+     * @param isTabSelected 当前tab是否为选中状态
+     */
     public void setTabViewState(TabLayout.Tab tab, boolean isTabSelected) {
         View tabCustomView = tab.getCustomView();
+
+        if (null == tabCustomView) {
+            return;
+        }
+
         TextView tvTitleInTab = (TextView) tabCustomView.findViewById(R.id.tab_title_tv);
         ImageView ivIconInTab = (ImageView) tabCustomView.findViewById(R.id.tab_icon_iv);
 

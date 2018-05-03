@@ -1,4 +1,4 @@
-package com.example.andriod.tablayoutproject.view;
+package com.example.andriod.tablayoutproject.view.frag;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

@@ -7,7 +7,7 @@
     android:orientation="vertical"
     tools:context="com.example.andriod.tablayoutproject.MainActivity">
 
-    <com.example.andriod.tablayoutproject.NoScrollableViewPager
+    <com.example.andriod.tablayoutproject.view.NoScrollableViewPager
         android:id="@+id/main_vp"
         android:layout_width="match_parent"
         android:layout_height="0dip"
@@ -20,7 +20,7 @@
         android:id="@+id/main_tl"
         android:layout_width="match_parent"
         android:layout_height="48dip"/>
-    <!--<com.example.andriod.tablayoutproject.TabView-->
+    <!--<com.example.andriod.tablayoutproject.view.TabView-->
     <!--android:paddingBottom="3dip"-->
     <!--android:paddingTop="9dip"-->
     <!--android:text="首页"-->

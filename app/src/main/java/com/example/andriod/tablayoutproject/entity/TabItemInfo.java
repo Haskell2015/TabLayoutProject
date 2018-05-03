@@ -21,8 +21,8 @@ public class TabItemInfo {
     private int[] mIconResId;
     private Class<? extends Fragment> mFragment;
 
-    public TabItemInfo(int tabType,String mTitle, int[] mIconResId, Class<? extends Fragment> mFragment) {
-        this.mTabType=tabType;
+    public TabItemInfo(int tabType, String mTitle, int[] mIconResId, Class<? extends Fragment> mFragment) {
+        this.mTabType = tabType;
         this.mTitle = mTitle;
         this.mIconResId = mIconResId;
         this.mFragment = mFragment;

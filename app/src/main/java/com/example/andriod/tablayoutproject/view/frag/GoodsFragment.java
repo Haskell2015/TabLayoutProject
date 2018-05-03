@@ -1,4 +1,4 @@
-package com.example.andriod.tablayoutproject.view;
+package com.example.andriod.tablayoutproject.view.frag;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,12 +14,12 @@ import com.example.andriod.tablayoutproject.R;
  * @date 2018/5/3
  * Email:3350730342@qq.com
  */
-public class MeFragment extends Fragment {
+public class GoodsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
         @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.member_fragment_layout, null);
+        View root = inflater.inflate(R.layout.goods_fragment_layout, null);
         return root;
     }
 }

@@ -1,4 +1,4 @@
-package com.example.andriod.tablayoutproject;
+package com.example.andriod.tablayoutproject.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -9,7 +9,8 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringDef;
 import android.util.AttributeSet;
-import android.util.Log;
+
+import com.example.andriod.tablayoutproject.R;
 
 /**
  * @author jiangqq
@@ -59,17 +60,6 @@ public class TabView extends android.support.v7.widget.AppCompatTextView {
      * 图片位置
      */
     private String mDrawableDirection = DRAWABLE_DEFAULT_DIRECTION;
-
-    /**
-     * 图片位置
-     */
-    @StringDef({DIRECTION.LEFT, DIRECTION.RIGHT, DIRECTION.TOP, DIRECTION.BOTTOM})
-    @interface DIRECTION {
-        String LEFT = "left";
-        String RIGHT = "right";
-        String TOP = "top";
-        String BOTTOM = "bottom";
-    }
 
     public TabView(Context context) {
         this(context, null);
@@ -157,5 +147,16 @@ public class TabView extends android.support.v7.widget.AppCompatTextView {
         matrix.postScale(scaleWidth, scaleHeight);
         // 得到新的图片
         return Bitmap.createBitmap(bm, 0, 0, width, height, matrix, true);
+    }
+
+    /**
+     * 图片位置
+     */
+    @StringDef({DIRECTION.LEFT, DIRECTION.RIGHT, DIRECTION.TOP, DIRECTION.BOTTOM})
+    @interface DIRECTION {
+        String LEFT = "left";
+        String RIGHT = "right";
+        String TOP = "top";
+        String BOTTOM = "bottom";
     }
 }

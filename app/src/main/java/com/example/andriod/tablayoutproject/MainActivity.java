@@ -1,22 +1,24 @@
 package com.example.andriod.tablayoutproject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.example.andriod.tablayoutproject.adapter.MainPageAdapter;
+import com.example.andriod.tablayoutproject.ann.TabTypeAnn;
 import com.example.andriod.tablayoutproject.entity.TabItemInfo;
-import com.example.andriod.tablayoutproject.view.FoundFragment;
-import com.example.andriod.tablayoutproject.view.MeFragment;
-import com.example.andriod.tablayoutproject.view.HomeFragment;
-import com.example.andriod.tablayoutproject.view.CartFragment;
-import com.example.andriod.tablayoutproject.view.GoodsFragment;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.example.andriod.tablayoutproject.view.NoScrollableViewPager;
+import com.example.andriod.tablayoutproject.view.frag.CartFragment;
+import com.example.andriod.tablayoutproject.view.frag.FoundFragment;
+import com.example.andriod.tablayoutproject.view.frag.GoodsFragment;
+import com.example.andriod.tablayoutproject.view.frag.HomeFragment;
+import com.example.andriod.tablayoutproject.view.frag.MeFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,11 +57,11 @@ public class MainActivity extends FragmentActivity {
 
     private void initData() {
         mTabItemInfoList = new ArrayList<>();
-        mTabItemInfoList.add(new TabItemInfo(1, mStringArray[0], mIconId[0], HomeFragment.class));
-        mTabItemInfoList.add(new TabItemInfo(2, mStringArray[1], mIconId[1], GoodsFragment.class));
-        mTabItemInfoList.add(new TabItemInfo(3, mStringArray[2], mIconId[2], FoundFragment.class));
-        mTabItemInfoList.add(new TabItemInfo(4, mStringArray[3], mIconId[3], CartFragment.class));
-        mTabItemInfoList.add(new TabItemInfo(5, mStringArray[4], mIconId[4], MeFragment.class));
+        mTabItemInfoList.add(new TabItemInfo(TabTypeAnn.HOME, mStringArray[0], mIconId[0], HomeFragment.class));
+        mTabItemInfoList.add(new TabItemInfo(TabTypeAnn.GOODS, mStringArray[1], mIconId[1], GoodsFragment.class));
+        mTabItemInfoList.add(new TabItemInfo(TabTypeAnn.FOUND, mStringArray[2], mIconId[2], FoundFragment.class));
+        mTabItemInfoList.add(new TabItemInfo(TabTypeAnn.SHOP_CART, mStringArray[3], mIconId[3], CartFragment.class));
+        mTabItemInfoList.add(new TabItemInfo(TabTypeAnn.ME, mStringArray[4], mIconId[4], MeFragment.class));
     }
 
     private void initView() {
@@ -72,43 +74,58 @@ public class MainActivity extends FragmentActivity {
             TabLayout.Tab tab = mTabLayout.getTabAt(i);
             if (null != tab) {
                 View tabView = mMainPageAdapter.getTabView(i, mTabItemInfoList.get(i).getmTabType());
+                getCartNum((TextView) tabView.findViewById(R.id.tab_cart_tv));
                 tab.setCustomView(tabView);
-                 mMainPageAdapter.setTabViewState(tab,tab.isSelected());
-//                if (tab.isSelected()) {
-//                    ((TextView) tabView.findViewById(R.id.tab_title_tv))
-//                        .setTextColor(getResources().getColor(R.color.tab_text_color_selected));
-//                }
+                mMainPageAdapter.setTabViewState(tab, tab.isSelected());
             }
         }
 
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                Log.d(TAG, "tab.isSelected():" + tab.isSelected());
-                Log.d(TAG, "onTabSelected");
-
-                mMainPageAdapter.setTabViewState(tab,true);
-//                 ((TextView) tab.getCustomView().findViewById(R.id.tab_title_tv))
-//                 .setTextColor(getResources().getColor(R.color.tab_text_color_selected));
+                mMainPageAdapter.setTabViewState(tab, true);
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-                Log.d(TAG, "tab.isSelected():" + tab.isSelected());
-                Log.d(TAG, "onTabUnselected");
-
-                mMainPageAdapter.setTabViewState(tab,false);
-//                 ((TextView) tab.getCustomView().findViewById(R.id.tab_title_tv))
-//                 .setTextColor(getResources().getColor(R.color.tab_text_color_normal));
+                mMainPageAdapter.setTabViewState(tab, false);
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-//                Log.d(TAG, "tab.isSelected():" + tab.isSelected());
-//                Log.d(TAG, "onTabReselected");
-//                mMainPageAdapter.setTabViewState(tab);
             }
         });
+    }
+
+    /**
+     * 异步获取购物车数量显示在UI
+     * @param tabView 购物车对应的tabview
+     */
+    private void getCartNum(final TextView tabView) {
+        // 模拟异步获取--实际中可以使用Rx+网络通信框架实现
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                boolean isEnd=false;
+                int cartNum=0;
+                for(;isEnd==false;){
+                    if(cartNum>15){
+                        isEnd=true;
+                        return;
+                    }
+                    cartNum++;
+                    SystemClock.sleep(3000L);
+                    final int finalCartNum = cartNum;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            tabView.setText(String.valueOf(finalCartNum));
+                        }
+                    });
+                }
+
+            }
+        }).start();
     }
 
     private void setTab(int position) {
