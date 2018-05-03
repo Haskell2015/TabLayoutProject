@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TabView">
+        <attr name="drawableWidth" format="dimension|reference" />
+        <attr name="drawableHeight" format="dimension|reference" />
+        <attr name="drawableSrc" format="reference"/>
+        <attr name="drawableDirection" format="string|reference"/>
+        <attr name="drawablePadding" format="dimension|reference"/>
+    </declare-styleable>
+</resources>
