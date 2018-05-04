@@ -1,5 +1,6 @@
 package com.example.andriod.tablayoutproject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,11 +8,13 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentActivity;
+import android.util.SparseArray;
 import android.view.View;
 import android.widget.TextView;
 
 import com.example.andriod.tablayoutproject.adapter.MainPageAdapter;
 import com.example.andriod.tablayoutproject.ann.TabTypeAnn;
+import com.example.andriod.tablayoutproject.entity.TabEntity;
 import com.example.andriod.tablayoutproject.entity.TabItemInfo;
 import com.example.andriod.tablayoutproject.view.NoScrollableViewPager;
 import com.example.andriod.tablayoutproject.view.frag.CartFragment;
@@ -19,6 +22,8 @@ import com.example.andriod.tablayoutproject.view.frag.FoundFragment;
 import com.example.andriod.tablayoutproject.view.frag.GoodsFragment;
 import com.example.andriod.tablayoutproject.view.frag.HomeFragment;
 import com.example.andriod.tablayoutproject.view.frag.MeFragment;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,7 +34,8 @@ import butterknife.Unbinder;
  */
 public class MainActivity extends FragmentActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
-
+    private static final String TEST_TAB_ITEM_JSON_DATA =
+        "[{\"title\": \"首页\",\"iconUrl\": {\"normalUrl\": \"正常的URL\",\"selectedIconUrl\": \"选中URL\"},\"tabType\": 1},{\"title\": \"分类\",\"iconUrl\": {\"normalUrl\": \"正常的URL\",\"selectedIconUrl\": \"选中URL\"},\"tabType\": 2},{\"title\": \"发现\",\"iconUrl\": {\"normalUrl\": \"正常的URL\",\"selectedIconUrl\": \"选中URL\"},\"tabType\": 3},{\"title\": \"购物车\",\"iconUrl\": {\"normalUrl\": \"正常的URL\",\"selectedIconUrl\": \"选中URL\"},\"tabType\": 4},{\"title\": \"会员\",\"iconUrl\": {\"normalUrl\": \"正常的URL\",\"selectedIconUrl\": \"选中URL\"},\"tabType\": 5}]";
     static String[] mStringArray;
     static int[][] mIconId;
     // 测试数据
@@ -39,11 +45,12 @@ public class MainActivity extends FragmentActivity {
             {R.drawable.tab_goods, R.drawable.tab_goods_press}, {R.drawable.tab_shops, R.drawable.tab_shops_press},
             {R.drawable.tab_shop_cart, R.drawable.tab_shop_cart_press}, {R.drawable.tab_me, R.drawable.tab_me_press}};
     }
+
     @BindView(R.id.main_vp)
     NoScrollableViewPager mViewPager;
     @BindView(R.id.main_tl)
     TabLayout mTabLayout;
-
+    private SparseArray mTabFragmentSparseArray;
     private List<TabItemInfo> mTabItemInfoList;
     private MainPageAdapter mMainPageAdapter;
     private Unbinder mUnbinder;
@@ -58,13 +65,68 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void initData() {
-        // TODO: 2018/5/3 从后台获取数据
+        // 初始化tab对应的Fragment
+        // mTabFragmentSparseArray=new SparseArray();
+        // mTabFragmentSparseArray.put(TabTypeAnn.HOME,HomeFragment.class);
+        // mTabFragmentSparseArray.put(TabTypeAnn.GOODS,GoodsFragment.class);
+        // mTabFragmentSparseArray.put(TabTypeAnn.FOUND,FoundFragment.class);
+        // mTabFragmentSparseArray.put(TabTypeAnn.SHOP_CART,CartFragment.class);
+        // mTabFragmentSparseArray.put(TabTypeAnn.ME,MeFragment.class);
+        // 初始化加载tab所需的数据
         mTabItemInfoList = new ArrayList<>();
-        mTabItemInfoList.add(new TabItemInfo(TabTypeAnn.HOME, mStringArray[0], mIconId[0], HomeFragment.class));
-        mTabItemInfoList.add(new TabItemInfo(TabTypeAnn.GOODS, mStringArray[1], mIconId[1], GoodsFragment.class));
-        mTabItemInfoList.add(new TabItemInfo(TabTypeAnn.FOUND, mStringArray[2], mIconId[2], FoundFragment.class));
-        mTabItemInfoList.add(new TabItemInfo(TabTypeAnn.SHOP_CART, mStringArray[3], mIconId[3], CartFragment.class));
-        mTabItemInfoList.add(new TabItemInfo(TabTypeAnn.ME, mStringArray[4], mIconId[4], MeFragment.class));
+        // TODO: 2018/5/4 模拟后台返回json
+        String tabItemInfo = loadDataFromServer();
+
+        Type jsonType = new TypeToken<List<TabEntity>>() {
+        }.getType();
+        Gson tabJson = new Gson();
+        List<TabEntity> tabEntityList = tabJson.fromJson(tabItemInfo, jsonType);
+        for (int i = 0, size = tabEntityList.size(); i < size; i++) {
+            TabEntity tabEntity = tabEntityList.get(i);
+            TabItemInfo itemInfo = new TabItemInfo();
+            itemInfo.setmTitle(tabEntity.getTitle());
+            itemInfo.setmIconUrlBean(tabEntity.getIconUrl());
+            itemInfo.setmTabType(tabEntity.getTabType());
+            // itemInfo.setmFragment(mTabFragmentSparseArray.get(tabEntity.getTabType()));
+            // TODO: 2018/5/4 考虑用Moshi
+            switch (tabEntity.getTabType()) {
+                case TabTypeAnn.HOME: {
+                    itemInfo.setmFragment(HomeFragment.class);
+                    break;
+                }
+                case TabTypeAnn.GOODS: {
+                    itemInfo.setmFragment(GoodsFragment.class);
+                    break;
+                }
+                case TabTypeAnn.FOUND: {
+                    itemInfo.setmFragment(FoundFragment.class);
+                    break;
+                }
+                case TabTypeAnn.SHOP_CART: {
+                    itemInfo.setmFragment(CartFragment.class);
+                    break;
+                }
+                case TabTypeAnn.ME: {
+                    itemInfo.setmFragment(MeFragment.class);
+                    break;
+                }
+                default:
+                    break;
+            }
+            mTabItemInfoList.add(itemInfo);
+        }
+
+        // 从xml获取默认的一些配置
+        // TypedArray typedArray = getResources().obtainTypedArray(R.array.tab_default);
+        // 获取默认的title
+        // String[] titleArray = getResources().getStringArray(typedArray.getResourceId(0, -1));
+        // TypedArray typeArr = getResources().obtainTypedArray(R.array.tab_icon_default);
+        // getResources().getIntArray(typedArray.getResourceId(1, -1));
+
+    }
+
+    private String loadDataFromServer() {
+        return TEST_TAB_ITEM_JSON_DATA;
     }
 
     private void initView() {
@@ -111,11 +173,9 @@ public class MainActivity extends FragmentActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                boolean isEnd = false;
                 int cartNum = 0;
-                for (; isEnd == false;) {
+                for (;;) {
                     if (cartNum > 15) {
-                        isEnd = true;
                         return;
                     }
                     cartNum++;

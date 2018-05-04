@@ -10,22 +10,22 @@ import android.support.v4.app.Fragment;
 public class TabItemInfo {
     /**
      * tab类型<br></br>
-     * <li>1:首页</li>
-     * <li>2:分类</li>
-     * <li>3:发现</li>
-     * <li>4:购物车</li>
-     * <li>5:会员</li>
+     * @see com.example.andriod.tablayoutproject.ann.TabTypeAnn
      */
     private int mTabType;
     private String mTitle;
-    private int[] mIconResId;
+    private TabEntity.IconUrlBean mIconUrlBean;
     private Class<? extends Fragment> mFragment;
 
-    public TabItemInfo(int tabType, String mTitle, int[] mIconResId, Class<? extends Fragment> mFragment) {
-        this.mTabType = tabType;
-        this.mTitle = mTitle;
-        this.mIconResId = mIconResId;
-        this.mFragment = mFragment;
+    public TabItemInfo() {
+    }
+
+    public TabEntity.IconUrlBean getmIconUrlBean() {
+        return mIconUrlBean;
+    }
+
+    public void setmIconUrlBean(TabEntity.IconUrlBean mIconUrlBean) {
+        this.mIconUrlBean = mIconUrlBean;
     }
 
     public int getmTabType() {
@@ -42,14 +42,6 @@ public class TabItemInfo {
 
     public void setmTitle(String mTitle) {
         this.mTitle = mTitle;
-    }
-
-    public int[] getmIconResId() {
-        return mIconResId;
-    }
-
-    public void setmIconResId(int[] mIconResId) {
-        this.mIconResId = mIconResId;
     }
 
     public Class<? extends Fragment> getmFragment() {

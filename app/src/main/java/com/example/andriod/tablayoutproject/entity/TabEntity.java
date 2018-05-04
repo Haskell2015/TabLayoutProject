@@ -7,35 +7,15 @@ package com.example.andriod.tablayoutproject.entity;
  * Email:3350730342@qq.com
  */
 public class TabEntity {
-    /*{
-    "title": "首页",
-        "iconUrl": {
-    "normalIconUrl": "正常URL",
-            "selectedIconUrl": "选中URL"
-    },
-    "tabType": 1
-    },
-    {
-        "title": "分类",
-            "iconUrl": {
-        "normalIconUrl": "正常URL",
-                "selectedIconUrl": "选中URL"
-    },
-        "tabType": 2
-    }
-    ]*/
+    /*[{"title": "首页","iconUrl": {"normalUrl": "正常的URL","selectedIconUrl": "选中URL"},"tabType": 1},{"title": "分类","iconUrl": {"normalUrl": "正常的URL","selectedIconUrl": "选中URL"},"tabType": 2},{"title": "发现","iconUrl": {"normalUrl": "正常的URL","selectedIconUrl": "选中URL"},"tabType": 3},{"title": "购物车","iconUrl": {"normalUrl": "正常的URL","selectedIconUrl": "选中URL"},"tabType": 4},{"title": "会员","iconUrl": {"normalUrl": "正常的URL","selectedIconUrl": "选中URL"},"tabType": 5}]*/
     /**
      * title : 首页
-     * iconUrl : {"normalIconUrl":"正常URL","selectedIconUrl":"选中URL"}
+     * iconUrl : {"normalUrl":"正常的URL","selectedIconUrl":"选中URL"}
      * tabType : 1
      */
 
     private String title;
     private IconUrlBean iconUrl;
-    /**
-     * tab的类型<br></br>
-     * @see com.example.andriod.tablayoutproject.ann.TabTypeAnn
-     */
     private int tabType;
 
     public String getTitle() {
@@ -64,19 +44,19 @@ public class TabEntity {
 
     public static class IconUrlBean {
         /**
-         * normalIconUrl : 正常URL
+         * normalUrl : 正常的URL
          * selectedIconUrl : 选中URL
          */
 
-        private String normalIconUrl;
+        private String normalUrl;
         private String selectedIconUrl;
 
-        public String getNormalIconUrl() {
-            return normalIconUrl;
+        public String getNormalUrl() {
+            return normalUrl;
         }
 
-        public void setNormalIconUrl(String normalIconUrl) {
-            this.normalIconUrl = normalIconUrl;
+        public void setNormalUrl(String normalUrl) {
+            this.normalUrl = normalUrl;
         }
 
         public String getSelectedIconUrl() {

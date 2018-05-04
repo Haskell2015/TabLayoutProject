@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.andriod.tablayoutproject.R;
-import com.example.andriod.tablayoutproject.ann.TabTypeAnn;
+import com.example.andriod.tablayoutproject.entity.TabEntity;
 import com.example.andriod.tablayoutproject.entity.TabItemInfo;
 
 /**
@@ -60,7 +60,7 @@ public class MainPageAdapter extends FragmentPagerAdapter {
      * 获取对应tab的view
      *
      * @param position tab选中的位置
-//     * @param tabType  tab加载的fragment类型
+    //     * @param tabType  tab加载的fragment类型
      * @return 当前tab的视图
      */
     public View getTabView(int position) {
@@ -90,9 +90,9 @@ public class MainPageAdapter extends FragmentPagerAdapter {
             .getColor(isTabSelected ? R.color.tab_text_color_selected : R.color.tab_text_color_normal));
 
         int currentTabPosition = tab.getPosition();
-        int[] iconResIds = mTabItemInfoList.get(currentTabPosition).getmIconResId();
+        TabEntity.IconUrlBean iconUrlBean = mTabItemInfoList.get(currentTabPosition).getmIconUrlBean();
         Glide.with(mContext)
-            .load(isTabSelected ? iconResIds[1] : iconResIds[0])
+            .load(isTabSelected ? iconUrlBean.getSelectedIconUrl() : iconUrlBean.getNormalUrl())
             .error(isTabSelected ? mDefaultTabIconResIds[currentTabPosition][1]
                 : mDefaultTabIconResIds[currentTabPosition][0])
             .into(ivIconInTab);
