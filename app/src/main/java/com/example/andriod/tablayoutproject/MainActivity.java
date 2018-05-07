@@ -7,6 +7,7 @@ import java.util.List;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.SparseArray;
 import android.view.View;
@@ -34,11 +35,20 @@ import butterknife.Unbinder;
  */
 public class MainActivity extends FragmentActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
+    /**
+     * 模拟后台返回的json数据
+     */
     private static final String TEST_TAB_ITEM_JSON_DATA =
         "[{\"title\": \"首页\",\"iconUrl\": {\"normalUrl\": \"正常的URL\",\"selectedIconUrl\": \"选中URL\"},\"tabType\": 1},{\"title\": \"分类\",\"iconUrl\": {\"normalUrl\": \"正常的URL\",\"selectedIconUrl\": \"选中URL\"},\"tabType\": 2},{\"title\": \"发现\",\"iconUrl\": {\"normalUrl\": \"正常的URL\",\"selectedIconUrl\": \"选中URL\"},\"tabType\": 3},{\"title\": \"购物车\",\"iconUrl\": {\"normalUrl\": \"正常的URL\",\"selectedIconUrl\": \"选中URL\"},\"tabType\": 4},{\"title\": \"会员\",\"iconUrl\": {\"normalUrl\": \"正常的URL\",\"selectedIconUrl\": \"选中URL\"},\"tabType\": 5}]";
+    /**
+     * tab对应的Title
+     */
     static String[] mStringArray;
+    /**
+     * Tab对应的2种状态的图标ResId
+     */
     static int[][] mIconId;
-    // 测试数据
+    // 初始化测试数据
     static {
         mStringArray = new String[] {"首页", "分类", "发现", "购物车", "会员"};
         mIconId = new int[][] {{R.drawable.tab_home, R.drawable.tab_home_press},
@@ -50,6 +60,7 @@ public class MainActivity extends FragmentActivity {
     NoScrollableViewPager mViewPager;
     @BindView(R.id.main_tl)
     TabLayout mTabLayout;
+
     private SparseArray mTabFragmentSparseArray;
     private List<TabItemInfo> mTabItemInfoList;
     private MainPageAdapter mMainPageAdapter;
@@ -65,13 +76,14 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void initData() {
+
         // 初始化tab对应的Fragment
-        // mTabFragmentSparseArray=new SparseArray();
-        // mTabFragmentSparseArray.put(TabTypeAnn.HOME,HomeFragment.class);
-        // mTabFragmentSparseArray.put(TabTypeAnn.GOODS,GoodsFragment.class);
-        // mTabFragmentSparseArray.put(TabTypeAnn.FOUND,FoundFragment.class);
-        // mTabFragmentSparseArray.put(TabTypeAnn.SHOP_CART,CartFragment.class);
-        // mTabFragmentSparseArray.put(TabTypeAnn.ME,MeFragment.class);
+        mTabFragmentSparseArray = new SparseArray();
+        mTabFragmentSparseArray.put(TabTypeAnn.HOME, HomeFragment.class);
+        mTabFragmentSparseArray.put(TabTypeAnn.GOODS, GoodsFragment.class);
+        mTabFragmentSparseArray.put(TabTypeAnn.FOUND, FoundFragment.class);
+        mTabFragmentSparseArray.put(TabTypeAnn.SHOP_CART, CartFragment.class);
+        mTabFragmentSparseArray.put(TabTypeAnn.ME, MeFragment.class);
         // 初始化加载tab所需的数据
         mTabItemInfoList = new ArrayList<>();
         // TODO: 2018/5/4 模拟后台返回json
@@ -87,32 +99,7 @@ public class MainActivity extends FragmentActivity {
             itemInfo.setmTitle(tabEntity.getTitle());
             itemInfo.setmIconUrlBean(tabEntity.getIconUrl());
             itemInfo.setmTabType(tabEntity.getTabType());
-            // itemInfo.setmFragment(mTabFragmentSparseArray.get(tabEntity.getTabType()));
-            // TODO: 2018/5/4 考虑用Moshi
-            switch (tabEntity.getTabType()) {
-                case TabTypeAnn.HOME: {
-                    itemInfo.setmFragment(HomeFragment.class);
-                    break;
-                }
-                case TabTypeAnn.GOODS: {
-                    itemInfo.setmFragment(GoodsFragment.class);
-                    break;
-                }
-                case TabTypeAnn.FOUND: {
-                    itemInfo.setmFragment(FoundFragment.class);
-                    break;
-                }
-                case TabTypeAnn.SHOP_CART: {
-                    itemInfo.setmFragment(CartFragment.class);
-                    break;
-                }
-                case TabTypeAnn.ME: {
-                    itemInfo.setmFragment(MeFragment.class);
-                    break;
-                }
-                default:
-                    break;
-            }
+            itemInfo.setmFragment((Class<? extends Fragment>) mTabFragmentSparseArray.get(tabEntity.getTabType()));
             mTabItemInfoList.add(itemInfo);
         }
 
@@ -193,11 +180,6 @@ public class MainActivity extends FragmentActivity {
                 }
             }
         }).start();
-    }
-
-    private void setTab(int position) {
-        mTabLayout.getTabAt(position).select();
-        mViewPager.setCurrentItem(position);
     }
 
     @Override
